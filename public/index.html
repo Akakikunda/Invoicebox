@@ -36,6 +36,7 @@
         .status-pending { color: #ffc107; font-weight: bold; }
         .status-paid { color: #28a745; font-weight: bold; }
         .status-defaulted { color: #dc3545; font-weight: bold; }
+        .payment-modal .modal-content { max-width: 400px; }
     </style>
 </head>
 <body>
@@ -121,8 +122,19 @@
             </div>
 
             <div id="analyticsTab" style="display: none;">
-                <canvas id="providerChart" width="400" height="200"></canvas>
-            </div>
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h3>Analytics Dashboard</h3>
+    </div>
+    
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+        <!-- Charts will be inserted here dynamically -->
+    </div>
+    
+    <!-- Add a loading message -->
+    <div id="analyticsLoading" style="text-align: center; padding: 40px;">
+        <p>Loading analytics data...</p>
+    </div>
+</div>
         </div>
 
         <!-- Purchaser Dashboard -->
@@ -135,8 +147,10 @@
             <div class="stats-grid" id="purchaserStats"></div>
 
             <div class="nav">
-                <div class="nav-item active" onclick="showTab('invoices')">Invoices</div>
-                <div class="nav-item" onclick="showTab('payments')">Payments</div>
+                <!--<div class="nav-item active" onclick="showTab('invoices')">Invoices</div>
+                <div class="nav-item" onclick="showTab('payments')">Payments</div>--->
+                <div class="nav-item active" onclick="showTab('invoices', event)">Invoices</div>
+                <div class="nav-item" onclick="showTab('payments', event)">Payments</div>
             </div>
 
             <div id="invoicesTab">
@@ -224,7 +238,76 @@
         </div>
     </div>
 
+    <!-- Payment Modal -->
+<div id="paymentModal" class="modal payment-modal">
+    <div class="modal-content">
+        <h3>Record Payment</h3>
+        <form id="paymentForm">
+            <input type="hidden" id="paymentInvoiceId">
+            <div class="form-group">
+                <label>Amount:</label>
+                <input type="number" id="paymentAmount" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label>Payment Date:</label>
+                <input type="date" id="paymentDate" required>
+            </div>
+            <div class="form-group">
+                <label>Payment Method:</label>
+                <select id="paymentMethod" required>
+                    <option value="Bank Transfer">Bank Transfer</option>
+                    <option value="Cash">Cash</option>
+                    <option value="Credit Card">Credit Card</option>
+                    <option value="Mobile Money">Mobile Money</option>
+                    <option value="Check">Check</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Reference Number (Optional):</label>
+                <input type="text" id="paymentReference">
+            </div>
+            <button type="submit" class="btn btn-success">Record Payment</button>
+            <button type="button" class="btn" onclick="document.getElementById('paymentModal').style.display='none'">Cancel</button>
+        </form>
+    </div>
+</div>
+
     <script>
+// Authentication state
+/*let currentUser = null;
+let token = localStorage.getItem('token');
+
+
+// Enhanced token validation
+function validateToken() {
+    if (!token) return false;
+    
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        // Check if token is expired (24 hours from issuance)
+        const tokenAge = Date.now() - (payload.iat * 1000);
+        const isExpired = tokenAge > (24 * 60 * 60 * 1000); // 24 hours
+        
+        if (!isExpired) {
+            currentUser = payload;
+            return true;
+        }
+    } catch (e) {
+        console.error('Token validation error:', e);
+    }
+    
+    // Clear invalid token
+    localStorage.removeItem('token');
+    token = null;
+    currentUser = null;
+    return false;
+}*/
+
+// Check if user is already logged in
+/*if (validateToken()) {
+    showDashboard();
+}*/
+
 // Authentication state
 let currentUser = null;
 let token = localStorage.getItem('token');
@@ -239,6 +322,121 @@ if (token) {
         localStorage.removeItem('token');
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+// Check if user is already logged in
+/*if (token) {
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        currentUser = payload;
+        showDashboard();
+    } catch (e) {
+        localStorage.removeItem('token');
+    }
+}*/
+
+/*if (token) {
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        // Check if token is expired (we use 24hr expiration)
+        const isExpired = Date.now() >= payload.exp * 1000;
+        if (!isExpired) {
+            currentUser = payload;
+            showDashboard();
+        } else {
+            localStorage.removeItem('token');
+            token = null;
+        }
+    } catch (e) {
+        localStorage.removeItem('token');
+        token = null;
+    }
+}
+*/
+
+// Refresh token silently
+async function refreshToken() {
+    try {
+        const response = await fetch('/api/refresh-token', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            token = data.token;
+            localStorage.setItem('token', token);
+            currentUser = JSON.parse(atob(token.split('.')[1]));
+            console.log('Token refreshed successfully');
+        }
+    } catch (error) {
+        console.log('Token refresh failed, continuing with current token');
+    }
+}
+
+// Refresh token every 30 minutes
+setInterval(refreshToken, 30 * 60 * 1000);
+
+
+
+
+// Add automatic token refresh on API calls
+async function apiCall(url, options = {}) {
+    if (!options.headers) options.headers = {};
+    options.headers['Authorization'] = `Bearer ${token}`;
+    
+    const response = await fetch(url, options);
+    
+    // If token is invalid, logout
+    if (response.status === 401 || response.status === 403) {
+        logout();
+        throw new Error('Session expired. Please login again.');
+    }
+    
+    return response;
+}
+
+
+// Enhanced API call function with better error handling
+/*async function apiCall(url, options = {}) {
+    if (!options.headers) options.headers = {};
+    options.headers['Authorization'] = `Bearer ${token}`;
+    
+    try {
+        const response = await fetch(url, options);
+        
+        
+        if (response.status === 401) {
+            // Token expired, try to refresh
+            await refreshToken();
+            // Retry with new token
+            options.headers['Authorization'] = `Bearer ${token}`;
+            const retryResponse = await fetch(url, options);
+            return retryResponse;
+        }
+        
+        return response;
+    } catch (error) {
+        console.error('API call failed:', error);
+        throw error;
+    }
+}*/
+
+
+
+
 
 // DOM Elements
 const authSection = document.getElementById('authSection');
@@ -330,7 +528,10 @@ async function loadProviderData() {
             fetch('/api/invoices', {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
-        ]);
+            ]);
+        
+
+        
 
         if (statsResponse.ok && invoicesResponse.ok) {
             const stats = await statsResponse.json();
@@ -346,6 +547,62 @@ async function loadProviderData() {
 
 // Load purchaser data
 async function loadPurchaserData() {
+    try {
+        const [statsResponse, invoicesResponse, paymentsResponse] = await Promise.all([
+            fetch('/api/dashboard/stats', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            }),
+            fetch('/api/invoices', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            }),
+            fetch('/api/payments', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+        ]);
+    
+
+        if (statsResponse.ok && invoicesResponse.ok) {
+            const stats = await statsResponse.json();
+            const invoices = await invoicesResponse.json();
+            
+            updatePurchaserStats(stats);
+            displayPurchaserInvoices(invoices);
+            
+            // Load payments if response was ok
+            if (paymentsResponse.ok) {
+                const payments = await paymentsResponse.json();
+                displayPayments(payments);
+            }
+        }
+    } catch (error) {
+        console.error('Failed to load purchaser data:', error);
+    }
+}
+
+// Display payments in payments tab
+function displayPayments(payments) {
+    const tbody = document.getElementById('paymentsBody');
+    tbody.innerHTML = payments.map(payment => `
+        <tr>
+            <td>${payment.invoice_number}</td>
+            <td>${payment.provider_company}</td>
+            <td>${new Date(payment.payment_date).toLocaleDateString()}</td>
+            <td>${formatCurrency(payment.amount)}</td>
+            <td>${payment.payment_method || 'Bank Transfer'}</td>
+        </tr>
+    `).join('');
+}
+
+
+
+
+
+
+
+
+
+// Load purchaser data
+/*async function loadPurchaserData() {
     try {
         const [statsResponse, invoicesResponse] = await Promise.all([
             fetch('/api/dashboard/stats', {
@@ -366,7 +623,7 @@ async function loadPurchaserData() {
     } catch (error) {
         console.error('Failed to load purchaser data:', error);
     }
-}
+}*/
 
 // Update provider statistics
 function updateProviderStats(stats) {
@@ -592,10 +849,16 @@ document.getElementById('createInvoiceForm').addEventListener('submit', async (e
     } catch (error) {
         alert('Failed to create invoice: ' + error.message);
     }
+
+
+    
 });
 
+
+
+
 // Record payment
-async function recordPayment(invoiceId) {
+/*async function recordPayment(invoiceId) {
     const amount = prompt('Enter payment amount:');
     if (!amount) return;
     
@@ -623,7 +886,151 @@ async function recordPayment(invoiceId) {
     } catch (error) {
         alert('Failed to record payment: ' + error.message);
     }
+}*/
+
+// Debug function to check payments
+async function debugPayments() {
+    try {
+        const response = await fetch('/api/payments', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        console.log('Payments response:', response.status, await response.json());
+    } catch (error) {
+        console.error('Payments debug error:', error);
+    }
 }
+
+
+
+// Show payment modal
+async function recordPayment(invoiceId) {
+    // Get invoice details to show remaining amount
+    try {
+        const response = await fetch(`/api/invoices/${invoiceId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (response.ok) {
+            const invoice = await response.json();
+            
+            // Set today's date as default
+            document.getElementById('paymentDate').value = new Date().toISOString().split('T')[0];
+            
+            // Store invoice ID for the form
+            document.getElementById('paymentInvoiceId').value = invoiceId;
+            
+            // Show invoice info in modal title
+            document.querySelector('#paymentModal h3').textContent = 
+                `Record Payment - ${invoice.invoice_number}`;
+            
+            document.getElementById('paymentModal').style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Failed to load invoice details:', error);
+        // Still show modal even if invoice details fail
+        document.getElementById('paymentInvoiceId').value = invoiceId;
+        document.getElementById('paymentDate').value = new Date().toISOString().split('T')[0];
+        document.getElementById('paymentModal').style.display = 'block';
+    }
+}
+
+
+
+
+
+
+
+
+// Handle payment form submission
+/*document.getElementById('paymentForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const invoiceId = document.getElementById('paymentInvoiceId').value;
+    const amount = parseFloat(document.getElementById('paymentAmount').value);
+    const paymentDate = document.getElementById('paymentDate').value;
+    const paymentMethod = document.getElementById('paymentMethod').value;
+    const referenceNumber = document.getElementById('paymentReference').value;
+    
+    try {
+        const response = await fetch(`/api/invoices/${invoiceId}/payments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                amount: amount,
+                payment_date: paymentDate,
+                payment_method: paymentMethod,
+                reference_number: referenceNumber
+            })
+        });
+
+        if (response.ok) {
+            alert('Payment recorded successfully!');
+            document.getElementById('paymentModal').style.display = 'none';
+            document.getElementById('paymentForm').reset();
+            loadPurchaserData(); // Refresh the data
+        } else {
+            const data = await response.json();
+            alert('Failed to record payment: ' + data.error);
+        }
+    } catch (error) {
+        alert('Failed to record payment: ' + error.message);
+    }
+});
+*/
+
+
+// Handle payment form submission
+document.getElementById('paymentForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const invoiceId = document.getElementById('paymentInvoiceId').value;
+    const amount = parseFloat(document.getElementById('paymentAmount').value);
+    const paymentDate = document.getElementById('paymentDate').value;
+    const paymentMethod = document.getElementById('paymentMethod').value;
+    const referenceNumber = document.getElementById('paymentReference').value;
+    
+    try {
+        const response = await fetch(`/api/invoices/${invoiceId}/payments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                amount: amount,
+                payment_date: paymentDate,
+                payment_method: paymentMethod,
+                reference_number: referenceNumber
+            })
+        });
+
+        if (response.ok) {
+            alert('Payment recorded successfully!');
+            document.getElementById('paymentModal').style.display = 'none';
+            document.getElementById('paymentForm').reset();
+            
+            // Force refresh all data
+            if (currentUser.role === 'purchaser') {
+                await loadPurchaserData();
+                
+                // Switch to payments tab to see the new payment
+                showTab('payments');
+            }
+        } else {
+            const data = await response.json();
+            alert('Failed to record payment: ' + data.error);
+        }
+    } catch (error) {
+        alert('Failed to record payment: ' + error.message);
+    }
+});
+
+
+
+
 
 // Mark invoice as defaulted
 async function markDefaulted(invoiceId) {
@@ -634,6 +1041,8 @@ async function markDefaulted(invoiceId) {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${token}` }
         });
+    method: 'POST'
+
 
         if (response.ok) {
             alert('Invoice marked as defaulted!');
@@ -648,9 +1057,142 @@ async function markDefaulted(invoiceId) {
 }
 
 // View invoice details
-function viewInvoice(invoiceId) {
-    alert(`Viewing invoice ${invoiceId} - Details would show here in a real implementation`);
+//function viewInvoice(invoiceId) {
+    //alert(`Viewing invoice ${invoiceId} - Details would show here in a real implementation`);
+//}
+
+
+// View invoice details
+/*async function viewInvoice(invoiceId) {
+    try {
+        const response = await fetch(`/api/invoices/${invoiceId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (response.ok) {
+            const invoice = await response.json();
+            showInvoiceDetails(invoice);
+        } else {
+            alert('Failed to load invoice details');
+        }
+    } catch (error) {
+        alert('Failed to load invoice details: ' + error.message);
+    }
+}*/
+
+
+
+// View invoice details
+async function viewInvoice(invoiceId) {
+    try {
+        const response = await fetch(`/api/invoices/${invoiceId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        const data = await response.json();
+        
+        if (response.ok) {
+            showInvoiceDetails(data);
+        } else {
+            alert('Failed to load invoice details: ' + (data.error || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error('Error loading invoice:', error);
+        alert('Failed to load invoice details: ' + error.message);
+    }
 }
+
+// Show invoice details in a modal
+function showInvoiceDetails(invoice) {
+    const itemsHtml = invoice.items.map(item => `
+        <tr>
+            <td>${item.description}</td>
+            <td>${item.quantity}</td>
+            <td>${formatCurrency(item.unit_price)}</td>
+            <td>${formatCurrency(item.line_total)}</td>
+        </tr>
+    `).join('');
+
+    const modalHtml = `
+        <div class="modal" style="display: block;">
+            <div class="modal-content" style="max-width: 700px;">
+                <h3>Invoice Details - ${invoice.invoice_number}</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div>
+                        <strong>Provider:</strong> ${invoice.provider_company || currentUser.company_name}<br>
+                        <strong>Purchaser:</strong> ${invoice.purchaser_company || currentUser.company_name}<br>
+                        <strong>Issue Date:</strong> ${new Date(invoice.issue_date).toLocaleDateString()}
+                    </div>
+                    <div>
+                        <strong>Due Date:</strong> ${new Date(invoice.due_date).toLocaleDateString()}<br>
+                        <strong>Currency:</strong> ${invoice.currency}<br>
+                        <strong>Status:</strong> <span class="status-${invoice.status}">${invoice.status.toUpperCase()}</span>
+                    </div>
+                </div>
+                
+                <h4>Items</h4>
+                <table style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${itemsHtml}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" style="text-align: right; font-weight: bold;">Grand Total:</td>
+                            <td style="font-weight: bold;">${formatCurrency(invoice.total_amount)}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+                
+                <div style="margin-top: 20px; text-align: center;">
+                    <button class="btn" onclick="this.closest('.modal').style.display='none'">Close</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Create and show modal
+    const modal = document.createElement('div');
+    modal.innerHTML = modalHtml;
+    document.body.appendChild(modal);
+    
+    // Close modal when clicking outside
+    modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.style.display = 'none';
+        }
+    });
+}
+
+
+
+
+
+
+
+// Tab navigation
+/*function showTab(tabName) {
+    // Hide all tabs
+    document.querySelectorAll('[id$="Tab"]').forEach(tab => {
+        tab.style.display = 'none';
+    });
+    
+    // Show selected tab
+    document.getElementById(tabName + 'Tab').style.display = 'block';
+    
+    // Update active nav
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    event.target.classList.add('active');
+}*/
 
 // Tab navigation
 function showTab(tabName) {
@@ -666,8 +1208,385 @@ function showTab(tabName) {
     document.querySelectorAll('.nav-item').forEach(item => {
         item.classList.remove('active');
     });
-    event.target.classList.add('active');
+    
+    // Activate the correct nav item
+    document.querySelectorAll('.nav-item').forEach(item => {
+        if (item.textContent.trim().toLowerCase().includes(tabName.toLowerCase())) {
+            item.classList.add('active');
+        }
+    });
+    
+    // Load analytics when analytics tab is clicked
+    if (tabName === 'analytics' && currentUser.role === 'provider') {
+        loadAnalytics();
+    }
 }
+
+// Load analytics data
+/*async function loadAnalytics() {
+    try {
+        const response = await fetch('/api/analytics', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (response.ok) {
+            const analytics = await response.json();
+            renderAnalyticsCharts(analytics);
+        } else {
+            console.error('Failed to load analytics');
+        }
+    } catch (error) {
+        console.error('Error loading analytics:', error);
+    }
+}*/
+
+
+// Load analytics data
+/*async function loadAnalytics() {
+    try {
+        // Show loading
+        document.getElementById('analyticsLoading').style.display = 'block';
+        
+        const response = await fetch('/api/analytics', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (response.ok) {
+            const analytics = await response.json();
+            renderAnalyticsCharts(analytics);
+        } else {
+            document.getElementById('analyticsLoading').innerHTML = '<p>Failed to load analytics data.</p>';
+        }
+    } catch (error) {
+        console.error('Error loading analytics:', error);
+        document.getElementById('analyticsLoading').innerHTML = '<p>Error loading analytics data.</p>';
+    }
+}*/
+
+// Load analytics data
+async function loadAnalytics() {
+    try {
+        // Show loading
+        document.getElementById('analyticsLoading').style.display = 'block';
+        document.getElementById('analyticsLoading').innerHTML = '<p>Loading analytics data...</p>';
+        
+        const response = await fetch('/api/analytics', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (response.ok) {
+            const analytics = await response.json();
+            renderAnalyticsCharts(analytics);
+        } else {
+            const errorData = await response.json();
+            document.getElementById('analyticsLoading').innerHTML = 
+                `<p>Failed to load analytics: ${errorData.error || 'Unknown error'}</p>`;
+        }
+    } catch (error) {
+        console.error('Error loading analytics:', error);
+        document.getElementById('analyticsLoading').innerHTML = 
+            `<p>Network error: ${error.message}</p>`;
+    }
+}
+
+// Render analytics charts
+/*function renderAnalyticsCharts(analytics) {
+    const ctx = document.getElementById('providerChart').getContext('2d');
+    
+    // Clear previous charts
+    if (window.analyticsCharts) {
+        Object.values(window.analyticsCharts).forEach(chart => chart.destroy());
+    }
+    window.analyticsCharts = {};
+    
+    // Chart 1: Invoice Status Distribution (Pie Chart)
+    const statusCtx = document.createElement('canvas');
+    statusCtx.width = 400;
+    statusCtx.height = 300;
+    document.getElementById('analyticsTab').appendChild(statusCtx);
+    
+    const statusLabels = analytics.statusDistribution.map(item => 
+        item.status.charAt(0).toUpperCase() + item.status.slice(1)
+    );
+    const statusData = analytics.statusDistribution.map(item => item.count);
+    const statusColors = ['#28a745', '#ffc107', '#dc3545']; // Green, Yellow, Red
+    
+    window.analyticsCharts.statusChart = new Chart(statusCtx, {
+        type: 'pie',
+        data: {
+            labels: statusLabels,
+            datasets: [{
+                data: statusData,
+                backgroundColor: statusColors,
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Invoice Status Distribution'
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+    
+    // Chart 2: Monthly Revenue (Line Chart)
+    const revenueCtx = document.createElement('canvas');
+    revenueCtx.width = 600;
+    revenueCtx.height = 300;
+    document.getElementById('analyticsTab').appendChild(revenueCtx);
+    
+    const months = analytics.monthlyRevenue.map(item => {
+        const [year, month] = item.month.split('-');
+        return new Date(year, month - 1).toLocaleDateString('en', { month: 'short', year: 'numeric' });
+    });
+    const revenue = analytics.monthlyRevenue.map(item => item.revenue);
+    
+    window.analyticsCharts.revenueChart = new Chart(revenueCtx, {
+        type: 'line',
+        data: {
+            labels: months,
+            datasets: [{
+                label: 'Monthly Revenue',
+                data: revenue,
+                borderColor: '#007bff',
+                backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                borderWidth: 2,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Monthly Revenue (Last 12 Months)'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    
+    // Chart 3: Top Purchasers (Bar Chart)
+    const purchasersCtx = document.createElement('canvas');
+    purchasersCtx.width = 600;
+    purchasersCtx.height = 300;
+    document.getElementById('analyticsTab').appendChild(purchasersCtx);
+    
+    const purchaserNames = analytics.topPurchasers.map(item => item.company_name);
+    const purchaserAmounts = analytics.topPurchasers.map(item => item.total_amount);
+    
+    window.analyticsCharts.purchasersChart = new Chart(purchasersCtx, {
+        type: 'bar',
+        data: {
+            labels: purchaserNames,
+            datasets: [{
+                label: 'Total Invoice Amount',
+                data: purchaserAmounts,
+                backgroundColor: '#17a2b8',
+                borderColor: '#138496',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Top 5 Purchasers by Revenue'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}*/
+
+// Render analytics charts
+function renderAnalyticsCharts(analytics) {
+    const analyticsTab = document.getElementById('analyticsTab');
+    
+    // Clear previous charts and hide loading
+    document.getElementById('analyticsLoading').style.display = 'none';
+    
+    // Clear previous charts
+    if (window.analyticsCharts) {
+        Object.values(window.analyticsCharts).forEach(chart => chart.destroy());
+    }
+    
+    // Remove existing chart containers
+    const existingCharts = analyticsTab.querySelectorAll('.chart-container');
+    existingCharts.forEach(chart => chart.remove());
+    
+    window.analyticsCharts = {};
+    
+    // Create container for charts
+    const chartsContainer = analyticsTab.querySelector('div[style*="display: flex"]');
+    
+    if (analytics.statusDistribution && analytics.statusDistribution.length > 0) {
+        // Chart 1: Invoice Status Distribution (Pie Chart)
+        const statusContainer = document.createElement('div');
+        statusContainer.className = 'chart-container';
+        statusContainer.style.cssText = 'background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
+        
+        const statusTitle = document.createElement('h4');
+        statusTitle.textContent = 'Invoice Status Distribution';
+        statusTitle.style.textAlign = 'center';
+        statusTitle.style.marginBottom = '20px';
+        statusContainer.appendChild(statusTitle);
+        
+        const statusCanvas = document.createElement('canvas');
+        statusCanvas.width = 300;
+        statusCanvas.height = 300;
+        statusContainer.appendChild(statusCanvas);
+        chartsContainer.appendChild(statusContainer);
+        
+        const statusLabels = analytics.statusDistribution.map(item => 
+            item.status.charAt(0).toUpperCase() + item.status.slice(1)
+        );
+        const statusData = analytics.statusDistribution.map(item => item.count);
+        const statusColors = ['#28a745', '#ffc107', '#dc3545'];
+        
+        window.analyticsCharts.statusChart = new Chart(statusCanvas, {
+            type: 'pie',
+            data: {
+                labels: statusLabels,
+                datasets: [{
+                    data: statusData,
+                    backgroundColor: statusColors,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    }
+    
+    if (analytics.monthlyRevenue && analytics.monthlyRevenue.length > 0) {
+        // Chart 2: Monthly Revenue (Line Chart)
+        const revenueContainer = document.createElement('div');
+        revenueContainer.className = 'chart-container';
+        revenueContainer.style.cssText = 'background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 100%; max-width: 800px;';
+        
+        const revenueTitle = document.createElement('h4');
+        revenueTitle.textContent = 'Monthly Revenue (Last 12 Months)';
+        revenueTitle.style.textAlign = 'center';
+        revenueTitle.style.marginBottom = '20px';
+        revenueContainer.appendChild(revenueTitle);
+        
+        const revenueCanvas = document.createElement('canvas');
+        revenueCanvas.width = 700;
+        revenueCanvas.height = 300;
+        revenueContainer.appendChild(revenueCanvas);
+        chartsContainer.appendChild(revenueContainer);
+        
+        const months = analytics.monthlyRevenue.map(item => {
+            const [year, month] = item.month.split('-');
+            return new Date(year, month - 1).toLocaleDateString('en', { month: 'short', year: 'numeric' });
+        });
+        const revenue = analytics.monthlyRevenue.map(item => item.revenue);
+        
+        window.analyticsCharts.revenueChart = new Chart(revenueCanvas, {
+            type: 'line',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: 'Monthly Revenue',
+                    data: revenue,
+                    borderColor: '#007bff',
+                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                    borderWidth: 2,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+    
+    if (analytics.topPurchasers && analytics.topPurchasers.length > 0) {
+        // Chart 3: Top Purchasers (Bar Chart)
+        const purchasersContainer = document.createElement('div');
+        purchasersContainer.className = 'chart-container';
+        purchasersContainer.style.cssText = 'background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 100%; max-width: 800px;';
+        
+        const purchasersTitle = document.createElement('h4');
+        purchasersTitle.textContent = 'Top 5 Purchasers by Revenue';
+        purchasersTitle.style.textAlign = 'center';
+        purchasersTitle.style.marginBottom = '20px';
+        purchasersContainer.appendChild(purchasersTitle);
+        
+        const purchasersCanvas = document.createElement('canvas');
+        purchasersCanvas.width = 700;
+        purchasersCanvas.height = 300;
+        purchasersContainer.appendChild(purchasersCanvas);
+        chartsContainer.appendChild(purchasersContainer);
+        
+        const purchaserNames = analytics.topPurchasers.map(item => item.company_name);
+        const purchaserAmounts = analytics.topPurchasers.map(item => item.total_amount);
+        
+        window.analyticsCharts.purchasersChart = new Chart(purchasersCanvas, {
+            type: 'bar',
+            data: {
+                labels: purchaserNames,
+                datasets: [{
+                    label: 'Total Invoice Amount',
+                    data: purchaserAmounts,
+                    backgroundColor: '#17a2b8',
+                    borderColor: '#138496',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+    
+    // Show message if no data
+    if ((!analytics.statusDistribution || analytics.statusDistribution.length === 0) &&
+        (!analytics.monthlyRevenue || analytics.monthlyRevenue.length === 0) &&
+        (!analytics.topPurchasers || analytics.topPurchasers.length === 0)) {
+        document.getElementById('analyticsLoading').innerHTML = '<p>No analytics data available yet. Create some invoices to see analytics.</p>';
+        document.getElementById('analyticsLoading').style.display = 'block';
+    }
+}
+
+
+
+
+
+
+
 
 // Logout
 function logout() {
@@ -680,5 +1599,38 @@ function logout() {
     authSection.style.display = 'block';
 }
     </script>
+    <!-- Payment Modal -->
+<div id="paymentModal" class="modal payment-modal">
+    <div class="modal-content">
+        <h3>Record Payment</h3>
+        <form id="paymentForm">
+            <input type="hidden" id="paymentInvoiceId">
+            <div class="form-group">
+                <label>Amount:</label>
+                <input type="number" id="paymentAmount" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label>Payment Date:</label>
+                <input type="date" id="paymentDate" required>
+            </div>
+            <div class="form-group">
+                <label>Payment Method:</label>
+                <select id="paymentMethod" required>
+                    <option value="Bank Transfer">Bank Transfer</option>
+                    <option value="Cash">Cash</option>
+                    <option value="Credit Card">Credit Card</option>
+                    <option value="Mobile Money">Mobile Money</option>
+                    <option value="Check">Check</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Reference Number (Optional):</label>
+                <input type="text" id="paymentReference">
+            </div>
+            <button type="submit" class="btn btn-success">Record Payment</button>
+            <button type="button" class="btn" onclick="document.getElementById('paymentModal').style.display='none'">Cancel</button>
+        </form>
+    </div>
+</div>
 </body>
 </html>

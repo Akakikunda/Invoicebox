@@ -154,6 +154,39 @@ app.post('/api/invoices', authenticateToken, (req, res) => {
     });
 });
 
+
+// Get single invoice details
+/*app.get('/api/invoices/:id', authenticateToken, (req, res) => {
+    const invoiceId = req.params.id;
+    
+    // Get invoice basic info
+    db.get(
+        `SELECT i.*, 
+                p.company_name as provider_company, 
+                pur.company_name as purchaser_company
+         FROM invoices i
+         LEFT JOIN users p ON i.provider_id = p.id
+         LEFT JOIN users pur ON i.purchaser_id = pur.id
+         WHERE i.id = ?`,
+        [invoiceId],
+        (err, invoice) => {
+            if (err) return res.status(500).json({ error: 'Database error' });
+            if (!invoice) return res.status(404).json({ error: 'Invoice not found' });
+            
+            // Get invoice items
+            db.all(
+                'SELECT * FROM invoice_items WHERE invoice_id = ?',
+                [invoiceId],
+                (err, items) => {
+                    if (err) return res.status(500).json({ error: 'Database error' });
+                    
+                    res.json({ ...invoice, items });
+                }
+            );
+        }
+    );
+});*/
+
 app.get('/api/invoices', authenticateToken, (req, res) => {
     let query = '';
     let params = [];
@@ -335,6 +368,218 @@ app.get('/api/dashboard/stats', authenticateToken, (req, res) => {
         res.json(stats);
     });
 });
+ 
+
+// Get all payments for a purchaser
+/*app.get('/api/payments', authenticateToken, (req, res) => {
+    if (req.user.role !== 'purchaser') {
+        return res.status(403).json({ error: 'Only purchasers can view payments' });
+    }
+    
+    db.all(
+        `SELECT p.*, i.invoice_number, u.company_name as provider_company 
+         FROM payments p
+         JOIN invoices i ON p.invoice_id = i.id
+         JOIN users u ON i.provider_id = u.id
+         WHERE i.purchaser_id = ?
+         ORDER BY p.payment_date DESC`,
+        [req.user.id],
+        (err, rows) => {
+            if (err) {
+                console.error('Database error:', err);
+                return res.status(500).json({ error: 'Database error' });
+            }
+            res.json(rows);
+        }
+    );
+});*/
+
+// Get all payments for a purchaser
+app.get('/api/payments', authenticateToken, (req, res) => {
+    if (req.user.role !== 'purchaser') {
+        return res.status(403).json({ error: 'Only purchasers can view payments' });
+    }
+    
+    console.log('Fetching payments for user:', req.user.id);
+    
+    db.all(
+        `SELECT p.*, i.invoice_number, u.company_name as provider_company 
+         FROM payments p
+         JOIN invoices i ON p.invoice_id = i.id
+         JOIN users u ON i.provider_id = u.id
+         WHERE i.purchaser_id = ?
+         ORDER BY p.payment_date DESC`,
+        [req.user.id],
+        (err, rows) => {
+            if (err) {
+                console.error('Database error:', err);
+                return res.status(500).json({ error: 'Database error' });
+            }
+            console.log('Found payments:', rows.length);
+            res.json(rows);
+        }
+    );
+});
+
+
+
+
+// Get single invoice details
+app.get('/api/invoices/:id', authenticateToken, (req, res) => {
+    const invoiceId = req.params.id;
+    const userId = req.user.id;
+    const userRole = req.user.role;
+    
+    // Build the base query
+    let query = `
+        SELECT i.*, 
+               provider.company_name as provider_company, 
+               purchaser.company_name as purchaser_company
+        FROM invoices i
+        LEFT JOIN users provider ON i.provider_id = provider.id
+        LEFT JOIN users purchaser ON i.purchaser_id = purchaser.id
+        WHERE i.id = ?
+    `;
+    
+    let params = [invoiceId];
+    
+    // Add role-based security: users can only see their own invoices
+    if (userRole === 'provider') {
+        query += ' AND i.provider_id = ?';
+        params.push(userId);
+    } else if (userRole === 'purchaser') {
+        query += ' AND i.purchaser_id = ?';
+        params.push(userId);
+    }
+    
+    // Get invoice basic info
+    db.get(query, params, (err, invoice) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+        if (!invoice) {
+            return res.status(404).json({ error: 'Invoice not found or access denied' });
+        }
+        
+        // Get invoice items
+        db.all(
+            'SELECT * FROM invoice_items WHERE invoice_id = ?',
+            [invoiceId],
+            (err, items) => {
+                if (err) {
+                    console.error('Database error:', err);
+                    return res.status(500).json({ error: 'Database error' });
+                }
+                
+                res.json({ ...invoice, items });
+            }
+        );
+    });
+});
+
+// Token refresh endpoint
+app.post('/api/refresh-token', authenticateToken, (req, res) => {
+    // Create new token with same user data but fresh expiration
+    const newToken = jwt.sign(
+        { 
+            id: req.user.id, 
+            email: req.user.email, 
+            role: req.user.role, 
+            company_name: req.user.company_name 
+        },
+        JWT_SECRET,
+        { expiresIn: '24h' }
+    );
+    
+    res.json({ token: newToken });
+});
+
+
+
+// Analytics data for providers
+app.get('/api/analytics', authenticateToken, (req, res) => {
+    if (req.user.role !== 'provider') {
+        return res.status(403).json({ error: 'Only providers can view analytics' });
+    }
+
+    const providerId = req.user.id;
+    
+    // Get status distribution
+    db.all(
+        `SELECT status, COUNT(*) as count, SUM(total_amount) as amount
+         FROM invoices 
+         WHERE provider_id = ?
+         GROUP BY status`,
+        [providerId],
+        (err, statusData) => {
+            if (err) {
+                console.error('Status distribution error:', err);
+                return res.status(500).json({ error: 'Database error' });
+            }
+            
+            // Get monthly revenue for last 12 months
+            db.all(
+                `SELECT 
+                    strftime('%Y-%m', issue_date) as month,
+                    SUM(total_amount) as revenue,
+                    COUNT(*) as invoice_count
+                 FROM invoices 
+                 WHERE provider_id = ? 
+                 AND issue_date >= date('now', '-12 months')
+                 GROUP BY strftime('%Y-%m', issue_date)
+                 ORDER BY month`,
+                [providerId],
+                (err, monthlyData) => {
+                    if (err) {
+                        console.error('Monthly revenue error:', err);
+                        return res.status(500).json({ error: 'Database error' });
+                    }
+                    
+                    // Get top purchasers
+                    db.all(
+                        `SELECT 
+                            u.company_name,
+                            COUNT(i.id) as invoice_count,
+                            SUM(i.total_amount) as total_amount
+                         FROM invoices i
+                         JOIN users u ON i.purchaser_id = u.id
+                         WHERE i.provider_id = ?
+                         GROUP BY u.id, u.company_name
+                         ORDER BY total_amount DESC
+                         LIMIT 5`,
+                        [providerId],
+                        (err, topPurchasers) => {
+                            if (err) {
+                                console.error('Top purchasers error:', err);
+                                return res.status(500).json({ error: 'Database error' });
+                            }
+                            
+                            res.json({
+                                statusDistribution: statusData || [],
+                                monthlyRevenue: monthlyData || [],
+                                topPurchasers: topPurchasers || []
+                            });
+                        }
+                    );
+                }
+            );
+        }
+    );
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.listen(PORT, () => {
     console.log(`InvoiceBox server running on port ${PORT}`);
