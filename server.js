@@ -584,3 +584,4 @@ app.get('/api/analytics', authenticateToken, (req, res) => {
 app.listen(PORT, () => {
     console.log(`InvoiceBox server running on port ${PORT}`);
 });
+
