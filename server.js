@@ -154,39 +154,6 @@ app.post('/api/invoices', authenticateToken, (req, res) => {
     });
 });
 
-
-// Get single invoice details
-/*app.get('/api/invoices/:id', authenticateToken, (req, res) => {
-    const invoiceId = req.params.id;
-    
-    // Get invoice basic info
-    db.get(
-        `SELECT i.*, 
-                p.company_name as provider_company, 
-                pur.company_name as purchaser_company
-         FROM invoices i
-         LEFT JOIN users p ON i.provider_id = p.id
-         LEFT JOIN users pur ON i.purchaser_id = pur.id
-         WHERE i.id = ?`,
-        [invoiceId],
-        (err, invoice) => {
-            if (err) return res.status(500).json({ error: 'Database error' });
-            if (!invoice) return res.status(404).json({ error: 'Invoice not found' });
-            
-            // Get invoice items
-            db.all(
-                'SELECT * FROM invoice_items WHERE invoice_id = ?',
-                [invoiceId],
-                (err, items) => {
-                    if (err) return res.status(500).json({ error: 'Database error' });
-                    
-                    res.json({ ...invoice, items });
-                }
-            );
-        }
-    );
-});*/
-
 app.get('/api/invoices', authenticateToken, (req, res) => {
     let query = '';
     let params = [];
@@ -317,14 +284,6 @@ app.get('/api/users/purchasers', authenticateToken, (req, res) => {
     );
 });
 
-
-
-
-
-
-
-
-
 // Dashboard Stats
 app.get('/api/dashboard/stats', authenticateToken, (req, res) => {
     const userId = req.user.id;
@@ -369,31 +328,6 @@ app.get('/api/dashboard/stats', authenticateToken, (req, res) => {
     });
 });
  
-
-// Get all payments for a purchaser
-/*app.get('/api/payments', authenticateToken, (req, res) => {
-    if (req.user.role !== 'purchaser') {
-        return res.status(403).json({ error: 'Only purchasers can view payments' });
-    }
-    
-    db.all(
-        `SELECT p.*, i.invoice_number, u.company_name as provider_company 
-         FROM payments p
-         JOIN invoices i ON p.invoice_id = i.id
-         JOIN users u ON i.provider_id = u.id
-         WHERE i.purchaser_id = ?
-         ORDER BY p.payment_date DESC`,
-        [req.user.id],
-        (err, rows) => {
-            if (err) {
-                console.error('Database error:', err);
-                return res.status(500).json({ error: 'Database error' });
-            }
-            res.json(rows);
-        }
-    );
-});*/
-
 // Get all payments for a purchaser
 app.get('/api/payments', authenticateToken, (req, res) => {
     if (req.user.role !== 'purchaser') {
@@ -420,9 +354,6 @@ app.get('/api/payments', authenticateToken, (req, res) => {
         }
     );
 });
-
-
-
 
 // Get single invoice details
 app.get('/api/invoices/:id', authenticateToken, (req, res) => {
@@ -567,19 +498,6 @@ app.get('/api/analytics', authenticateToken, (req, res) => {
         }
     );
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 app.listen(PORT, () => {
     console.log(`InvoiceBox server running on port ${PORT}`);

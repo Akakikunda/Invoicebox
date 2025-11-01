@@ -90,22 +90,15 @@
     background: #0056b3 !important;
 }
 
-
-/* Sidebar Layout */
 .app-layout {
     display: flex;
     min-height: 100vh;
 }
 
-/*.sidebar {
-    width: 250px;
-    background: #f8f9fa;
-    border-right: 1px solid #e0e0e0;
-    padding: 20px 0;
-}*/
+
 .sidebar {
     width: 250px;
-    background: #1a1f36; /* Dark blue background */
+    background: #1a1f36; 
     border-right: 1px solid #2d3748;
     padding: 20px 0;
     color: white;
@@ -114,7 +107,6 @@
 
 .sidebar-header {
     padding: 0 20px 20px 20px;
-    /*border-bottom: 1px solid #e0e0e0;*/
     margin-bottom: 20px;
     border-bottom: 1px solid #2d3748;
 }
@@ -122,7 +114,6 @@
 .sidebar-header h3 {
     margin: 0 0 5px 0;
     color: white;  
-    /*color: #333;*/
 
 }
 .sidebar-header p {
@@ -148,8 +139,6 @@
 
 
 .nav-link:hover {
-   /* background: #e9ecef;
-    color: #007bff;*/
     background: #2d3748;
     color: white;
 }
@@ -167,7 +156,6 @@
 
 .nav-divider {
     height: 1px;
-    /*background: #e0e0e0;*/
     margin: 15px 0;
     background: #2d3748;
 }
@@ -198,8 +186,7 @@
 }
 
 .content-header {
-    /*display: flex;*/
-    display: block; /* Change from flex to block */
+    display: block; 
     justify-content: between;
     align-items: center;
     margin-bottom: 30px;
@@ -208,20 +195,14 @@
 }
 
 
-/*.content-header h2 {
-    margin: 0;
-    color: #333;
-}*/
+
 .content-header h2 {
-    margin: 0 0 10px 0; /* Add space below the heading */
+    margin: 0 0 10px 0; 
     color: #333;
     font-size: 24px;
 }
 
-/*.content-header p {
-    margin: 5px 0 0 0;
-    color: #666;
-}*/
+
 .content-header p {
     margin: 0;
     color: #666;
@@ -233,8 +214,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- Login/Register Section -->
-
         <!-- Login/Register Section -->
 <div id="authSection" class="auth-section">
     <div style="max-width: 400px; margin: 0 auto; text-align: center;">
@@ -250,25 +229,7 @@
             <button id="registerTabBtn" class="auth-tab" onclick="showAuthTab('register')">Get Started</button>
         </div>
 
-        <!-- Login Form -->
-        <!--<div id="loginFormContainer">
-            <form id="loginForm" style="text-align: left;">
-                <div class="form-group">
-                    <label style="color: #333; font-weight: 500; margin-bottom: 8px;">Email</label>
-                    <input type="email" id="loginEmail" required style="width: 100%; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 16px;">
-                </div>
-                <div class="form-group" style="margin-bottom: 20px;">
-                    <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 8px;">
-                        <label style="color: #333; font-weight: 500;">Password</label>
-                        <a href="#" style="color: #666; text-decoration: none; font-size: 14px;">Forgot password?</a>
-                    </div>
-                    <input type="password" id="loginPassword" required style="width: 100%; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 16px;">
-                </div>
-                <button type="submit" class="auth-btn primary" style="width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; margin-bottom: 20px;">
-                    Sign In
-                </button>
-            </form>
-        </div>-->
+        
         <!-- Login Form -->
 <div id="loginFormContainer">
     <form id="loginForm" style="text-align: left;">
@@ -316,169 +277,9 @@
                 </button>
             </form>
         </div>
-
-        <!-- Divider -->
-        <!--<div style="margin: 30px 0; text-align: center; position: relative;">
-            <div style="height: 1px; background: #e0e0e0;"></div>
-            <span style="background: white; padding: 0 15px; position: absolute; top: -10px; color: #666;">Or continue with</span>
-        </div>-->
-
-        <!-- Social Login Placeholder -->
-        <!--<div style="text-align: center;">
-            <p style="color: #666; margin-bottom: 20px;">Social login options coming soon</p>
-        </div>-->
     </div>
 </div>
-        <!--<div id="authSection" class="auth-section">
-            <h2>InvoiceBox</h2>
-            <div style="display: flex; gap: 20px; margin-top: 20px;">
-                <div style="flex: 1;">
-                    <h3>Login</h3>
-                    <form id="loginForm">
-                        <div class="form-group">
-                            <label>Email:</label>
-                            <input type="email" id="loginEmail" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Password:</label>
-                            <input type="password" id="loginPassword" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Login</button>
-                    </form>
-                </div>
-                <div style="flex: 1;">
-                    <h3>Register</h3>
-                    <form id="registerForm">
-                        <div class="form-group">
-                            <label>Email:</label>
-                            <input type="email" id="registerEmail" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Password:</label>
-                            <input type="password" id="registerPassword" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Role:</label>
-                            <select id="registerRole" required>
-                                <option value="provider">Provider</option>
-                                <option value="purchaser">Purchaser</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Company Name:</label>
-                            <input type="text" id="registerCompany" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Register</button>
-                    </form>
-                </div>
-            </div>
-        </div>-->
-
-        <!-- Provider Dashboard -->
-        <!--<div id="providerDashboard" class="dashboard">
-            <div class="header">
-                <h2>Provider Dashboard - <span id="providerCompany"></span></h2>
-                <button class="btn btn-primary" onclick="showCreateInvoiceModal()">Create Invoice</button>
-                <button class="btn" onclick="logout()" style="float: right;">Logout</button>
-            </div>
-
-            <div class="stats-grid" id="providerStats"></div>
-
-            <div class="nav">
-                <div class="nav-item active" onclick="showTab('invoices')">Invoices</div>
-                <div class="nav-item" onclick="showTab('analytics')">Analytics</div>
-            </div>
-
-            <div id="invoicesTab">
-                <div class="invoices-table">
-                    <table id="providerInvoicesTable">
-                        <thead>
-                            <tr>
-                                <th>Invoice #</th>
-                                <th>Purchaser</th>
-                                <th>Issue Date</th>
-                                <th>Amount</th>
-                                <th>Currency</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="providerInvoicesBody"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="analyticsTab" style="display: none;">
-    <div style="text-align: center; margin-bottom: 20px;">
-        <h3>Analytics Dashboard</h3>
-    </div>
-    
-    <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
-        <-- Charts will be inserted here dynamically -->
-    <!--</div>
-    
-    !-- Add a loading message -->
-    <!--<div id="analyticsLoading" style="text-align: center; padding: 40px;">
-        <p>Loading analytics data...</p>
-    </div>
-</div>
-        </div>
-
-        <-- Purchaser Dashboard -->
-        <!--<div id="purchaserDashboard" class="dashboard">
-            <div class="header">
-                <h2>Purchaser Dashboard - <span id="purchaserCompany"></span></h2>
-                <button class="btn" onclick="logout()" style="float: right;">Logout</button>
-            </div>
-
-            <div class="stats-grid" id="purchaserStats"></div>
-
-            <div class="nav">
-            <--<div class="nav-item active" onclick="showTab('invoices')">Invoices</div>
-                <div class="nav-item" onclick="showTab('payments')">Payments</div>--->
-               <!--- <div class="nav-item active" onclick="showTab('invoices', event)">Invoices</div>
-                <div class="nav-item" onclick="showTab('payments', event)">Payments</div>
-            </div>
-
-            <div id="invoicesTab">
-                <div class="invoices-table">
-                    <table id="purchaserInvoicesTable">
-                        <thead>
-                            <tr>
-                                <th>Invoice #</th>
-                                <th>Provider</th>
-                                <th>Issue Date</th>
-                                <th>Due Date</th>
-                                <th>Amount</th>
-                                <th>Currency</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="purchaserInvoicesBody"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="paymentsTab" style="display: none;">
-                <div class="invoices-table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Invoice #</th>
-                                <th>Provider</th>
-                                <th>Payment Date</th>
-                                <th>Amount</th>
-                                <th>Method</th>
-                            </tr>
-                        </thead>
-                        <tbody id="paymentsBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>-->
-
+        
 
 <!-- Provider Dashboard -->
 <div id="providerDashboard" class="dashboard">
@@ -551,139 +352,16 @@
                     <h2>Analytics</h2>
                 </div>
                 
-                <!--<div id="analyticsContent">
-                    <div style="text-align: center; padding: 40px;">
-                        <p>Loading analytics data...</p>
-                    </div>
-                </div>-->
+               
                 <div id="analyticsContent">
     <div id="analyticsLoading" style="text-align: center; padding: 40px;">
         <p>Loading analytics data...</p>
     </div>
-    <!-- Charts will be loaded here dynamically -->
 </div>
             </div>
         </div>
     </div>
 </div>
-
-<!-- Purchaser Dashboard -->
-<!--<div id="purchaserDashboard" class="dashboard">
-    <div class="app-layout">
-        !-- Sidebar -->
-        <!--<div class="sidebar">
-            <div class="sidebar-header">
-                <h3>InvoiceBox</h3>
-                <p style="color: #666; font-size: 12px; margin: 0;">Purchaser Dashboard</p>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="#" class="nav-link active" onclick="showSection('dashboard', event)">
-                    <span>📊</span> Dashboard
-                </a>
-                <a href="#" class="nav-link" onclick="showSection('invoices', event)">
-                    <span>📋</span> Invoices
-                </a>
-                <a href="#" class="nav-link" onclick="showSection('payments', event)">
-                    <span>💰</span> Payments
-                </a>
-                <div class="nav-divider"></div>
-                <a href="#" class="nav-link logout-link" onclick="logout()">
-                    <span>🚪</span> Logout
-                </a>
-            </nav>
-        </div>
-
-        !-- Main Content -->
-        <!--<div class="main-content">
-            !-- Dashboard Section -->
-            <!--<div id="purchaserDashboardSection" class="content-section active">
-                <div class="content-header">
-                    <h2>Dashboard Overview</h2>
-                    <p>Welcome back, <span id="purchaserCompany"></span></p>
-                </div>
-                
-                <div class="stats-grid" id="purchaserStats">
-                    <-- Your existing stats will go here -->
-                <!--</div>
-            </div>
-
-            <-- Invoices Section -->
-            <!--<div id="purchaserInvoicesSection" class="content-section">
-                <div class="content-header">
-                    <h2>Invoices</h2>
-                </div>
-                
-                <div class="invoices-table">
-                    <table id="purchaserInvoicesTable">
-                        <thead>
-                            <tr>
-                                <th>Invoice #</th>
-                                <th>Provider</th>
-                                <th>Issue Date</th>
-                                <th>Due Date</th>
-                                <th>Amount</th>
-                                <th>Currency</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="purchaserInvoicesBody"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <-- Payments Section -->
-            <!--<div id="paymentsSection" class="content-section">
-                <div class="content-header">
-                    <h2>Payment History</h2>
-                </div>
-                
-                 !-- Add this temporary button -->
-                 <!--<button class="btn btn-primary" onclick="testPayments()">Test Payments</button>
-                 </div>
-
-
-                <div class="invoices-table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Invoice #</th>
-                                <th>Provider</th>
-                                <th>Payment Date</th>
-                                <th>Amount</th>
-                                <th>Method</th>
-                            </tr>
-                        </thead>
-                        <tbody id="paymentsBody"></tbody>
-                    </table>
-                </div>
-            </div>-->
-
-            <!-- Payments Section -->
-<!--<div id="paymentsSection" class="content-section">
-    <div class="content-header">
-        <h2>Payment History</h2>
-        <-- Add this temporary button -->
-        <!--<button class="btn btn-primary" onclick="testPayments()">Test Payments</button>
-    </div>
-
-    <div class="invoices-table">
-        <table>
-            <thead>
-                <tr>
-                    <th>Invoice #</th>
-                    <th>Provider</th>
-                    <th>Payment Date</th>
-                    <th>Amount</th>
-                    <th>Method</th>
-                </tr>
-            </thead>
-            <tbody id="paymentsBody"></tbody>
-        </table>
-    </div>
-        </div>
-    </div>
-</div>-->
 
 <!-- Purchaser Dashboard -->
 <div id="purchaserDashboard" class="dashboard">
@@ -750,29 +428,7 @@
                 </div>
             </div>
 
-            <!-- Payments Section -->
-            <!--<div id="paymentsSection" class="content-section">
-                <div class="content-header">
-                    <h2>Payment History</h2>
-                    <-- Add this temporary button -->
-                    <!--<button class="btn btn-primary" onclick="testPayments()">Test Payments</button>
-                </div>
-                
-                <div class="invoices-table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Invoice #</th>
-                                <th>Provider</th>
-                                <th>Payment Date</th>
-                                <th>Amount</th>
-                                <th>Method</th>
-                            </tr>
-                        </thead>
-                        <tbody id="paymentsBody"></tbody>
-                    </table>
-                </div>
-            </div>-->
+           
             <!-- Payments Section -->
 <div id="paymentsSection" class="content-section">
     <div class="content-header">
@@ -807,18 +463,6 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
 
     <!-- Create Invoice Modal -->
     <div id="createInvoiceModal" class="modal">
@@ -901,40 +545,6 @@
 </div>
 
     <script>
-// Authentication state
-/*let currentUser = null;
-let token = localStorage.getItem('token');
-
-
-// Enhanced token validation
-function validateToken() {
-    if (!token) return false;
-    
-    try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        // Check if token is expired (24 hours from issuance)
-        const tokenAge = Date.now() - (payload.iat * 1000);
-        const isExpired = tokenAge > (24 * 60 * 60 * 1000); // 24 hours
-        
-        if (!isExpired) {
-            currentUser = payload;
-            return true;
-        }
-    } catch (e) {
-        console.error('Token validation error:', e);
-    }
-    
-    // Clear invalid token
-    localStorage.removeItem('token');
-    token = null;
-    currentUser = null;
-    return false;
-}*/
-
-// Check if user is already logged in
-/*if (validateToken()) {
-    showDashboard();
-}*/
 
 // Authentication state
 let currentUser = null;
@@ -950,7 +560,6 @@ if (token) {
         localStorage.removeItem('token');
     }
 }
-
 
 // Auth tab switching
 function showAuthTab(tabName) {
@@ -972,73 +581,6 @@ function showAuthTab(tabName) {
     }
 }
 
-// Section navigation
-/*function showSection(sectionName, event) {
-    if (event) event.preventDefault();
-    
-    const userRole = currentUser.role;
-    const prefix = userRole === 'provider' ? '' : 'purchaser';
-    
-    // Hide all sections
-    document.querySelectorAll('.content-section').forEach(section => {
-        section.classList.remove('active');
-    });
-    
-    // Show selected section
-    const sectionId = userRole === 'provider' ? 
-        `${sectionName}Section` : 
-        `${prefix}${sectionName.charAt(0).toUpperCase() + sectionName.slice(1)}Section`;
-    
-    document.getElementById(sectionId).classList.add('active');
-    
-    // Update active nav link
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.classList.remove('active');
-    });
-    
-    if (event) {
-        event.target.classList.add('active');
-    } else {
-        // Find and activate the correct nav link
-        document.querySelectorAll('.nav-link').forEach(link => {
-            if (link.textContent.toLowerCase().includes(sectionName.toLowerCase())) {
-                link.classList.add('active');
-            }
-        });
-    }
-    
-    // Load data for the section
-    /*if (sectionName === 'dashboard') {
-        if (userRole === 'provider') {
-            loadProviderData();
-        } else {
-            loadPurchaserData();
-        }
-    } else if (sectionName === 'analytics' && userRole === 'provider') {
-        loadAnalytics();
-    } else if (sectionName === 'payments' && userRole === 'purchaser') {
-        loadPurchaserData(); // This will load payments too
-    }*/
-   /*if (sectionName === 'dashboard') {
-        if (userRole === 'provider') {
-            loadProviderData();
-        } else {
-            loadPurchaserData();
-        }
-    } else if (sectionName === 'analytics' && userRole === 'provider') {
-        loadAnalytics();
-    } else if (sectionName === 'payments' && userRole === 'purchaser') {
-        // Make sure payments data is loaded
-        loadPurchaserData();
-    } else if (sectionName === 'invoices') {
-        // Load invoices when invoices section is clicked
-        if (userRole === 'provider') {
-            loadProviderData();
-        } else {
-            loadPurchaserData();
-        }
-    } 
-} */
 
 // Section navigation
 async function showSection(sectionName, event) {
@@ -1100,40 +642,6 @@ async function showSection(sectionName, event) {
 }
 
 
-
-
-
-
-// Check if user is already logged in
-/*if (token) {
-    try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        currentUser = payload;
-        showDashboard();
-    } catch (e) {
-        localStorage.removeItem('token');
-    }
-}*/
-
-/*if (token) {
-    try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        // Check if token is expired (we use 24hr expiration)
-        const isExpired = Date.now() >= payload.exp * 1000;
-        if (!isExpired) {
-            currentUser = payload;
-            showDashboard();
-        } else {
-            localStorage.removeItem('token');
-            token = null;
-        }
-    } catch (e) {
-        localStorage.removeItem('token');
-        token = null;
-    }
-}
-*/
-
 // Refresh token silently
 async function refreshToken() {
     try {
@@ -1180,30 +688,6 @@ async function apiCall(url, options = {}) {
 }
 
 
-// Enhanced API call function with better error handling
-/*async function apiCall(url, options = {}) {
-    if (!options.headers) options.headers = {};
-    options.headers['Authorization'] = `Bearer ${token}`;
-    
-    try {
-        const response = await fetch(url, options);
-        
-        
-        if (response.status === 401) {
-            // Token expired, try to refresh
-            await refreshToken();
-            // Retry with new token
-            options.headers['Authorization'] = `Bearer ${token}`;
-            const retryResponse = await fetch(url, options);
-            return retryResponse;
-        }
-        
-        return response;
-    } catch (error) {
-        console.error('API call failed:', error);
-        throw error;
-    }
-}*/
 
 // Test payments function - add this temporarily
 async function testPayments() {
@@ -1324,38 +808,6 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
 });
 
 // Show appropriate dashboard
-/*function showDashboard() {
-    authSection.style.display = 'none';
-    
-    if (currentUser.role === 'provider') {
-        providerDashboard.style.display = 'block';
-        purchaserDashboard.style.display = 'none';
-        document.getElementById('providerCompany').textContent = currentUser.company_name;
-        loadProviderData();
-    } else {
-        purchaserDashboard.style.display = 'block';
-        providerDashboard.style.display = 'none';
-        document.getElementById('purchaserCompany').textContent = currentUser.company_name;
-        loadPurchaserData();
-    }
-}*/
-// Show appropriate dashboard
-/*function showDashboard() {
-    authSection.style.display = 'none';
-    
-    if (currentUser.role === 'provider') {
-        providerDashboard.style.display = 'block';
-        purchaserDashboard.style.display = 'none';
-        document.getElementById('providerCompany').textContent = currentUser.company_name;
-        loadProviderData();
-    } else {
-        purchaserDashboard.style.display = 'block';
-        providerDashboard.style.display = 'none';
-        document.getElementById('purchaserCompany').textContent = currentUser.company_name;
-        loadPurchaserData();
-    }
-}*/
-// Show appropriate dashboard
 function showDashboard() {
     authSection.style.display = 'none';
     
@@ -1401,72 +853,7 @@ async function loadProviderData() {
     }
 }
 
-// Load purchaser data
-/*async function loadPurchaserData() {
-    try {
-        const [statsResponse, invoicesResponse, paymentsResponse] = await Promise.all([
-            fetch('/api/dashboard/stats', {
-                headers: { 'Authorization': `Bearer ${token}` }
-            }),
-            fetch('/api/invoices', {
-                headers: { 'Authorization': `Bearer ${token}` }
-            }),
-            fetch('/api/payments', {
-                headers: { 'Authorization': `Bearer ${token}` }
-            })
-        ]);
-    
-
-        if (statsResponse.ok && invoicesResponse.ok) {
-            const stats = await statsResponse.json();
-            const invoices = await invoicesResponse.json();
-            
-            updatePurchaserStats(stats);
-            displayPurchaserInvoices(invoices);
-            
-            // Load payments if response was ok
-            if (paymentsResponse.ok) {
-                const payments = await paymentsResponse.json();
-                displayPayments(payments);
-            }
-        }
-    } catch (error) {
-        console.error('Failed to load purchaser data:', error);
-    }
-}*/
-// Load purchaser data
-/*async function loadPurchaserData() {
-    try {
-        const [statsResponse, invoicesResponse, paymentsResponse] = await Promise.all([
-            fetch('/api/dashboard/stats', {
-                headers: { 'Authorization': `Bearer ${token}` }
-            }),
-            fetch('/api/invoices', {
-                headers: { 'Authorization': `Bearer ${token}` }
-            }),
-            fetch('/api/payments', {
-                headers: { 'Authorization': `Bearer ${token}` }
-            })
-        ]);
-
-        if (statsResponse.ok && invoicesResponse.ok) {
-            const stats = await statsResponse.json();
-            const invoices = await invoicesResponse.json();
-            
-            updatePurchaserStats(stats);
-            displayPurchaserInvoices(invoices);
-            
-            // Always load payments, even if empty
-            if (paymentsResponse.ok) {
-                const payments = await paymentsResponse.json();
-                displayPayments(payments);
-            }
-        }
-    } catch (error) {
-        console.error('Failed to load purchaser data:', error);
-    }
-}*/
-// Load purchaser data - ENHANCED VERSION
+// Load purchaser data 
 async function loadPurchaserData() {
     try {
         console.log('Loading purchaser data...');
@@ -1519,68 +906,6 @@ async function loadPurchaserData() {
 }
 
 
-
-// Display payments in payments tab
-/*function displayPayments(payments) {
-    const tbody = document.getElementById('paymentsBody');
-    tbody.innerHTML = payments.map(payment => `
-        <tr>
-            <td>${payment.invoice_number}</td>
-            <td>${payment.provider_company}</td>
-            <td>${new Date(payment.payment_date).toLocaleDateString()}</td>
-            <td>${formatCurrency(payment.amount)}</td>
-            <td>${payment.payment_method || 'Bank Transfer'}</td>
-        </tr>
-    `).join('');
-}*/
-// Display payments in payments section
-// Display payments in payments section
-/*function displayPayments(payments) {
-    const tbody = document.getElementById('paymentsBody');
-    if (!tbody) return;
-    
-    if (!payments || payments.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: #666;">No payments recorded yet</td></tr>';
-    } else {
-        tbody.innerHTML = payments.map(payment => `
-            <tr>
-                <td>${payment.invoice_number || 'N/A'}</td>
-                <td>${payment.provider_company || 'N/A'}</td>
-                <td>${new Date(payment.payment_date).toLocaleDateString()}</td>
-                <td>${formatCurrency(payment.amount)}</td>
-                <td>${payment.payment_method || 'Bank Transfer'}</td>
-            </tr>
-        `).join('');
-    }
-}*/
-
-// Display payments in payments section - FIXED VERSION
-/*f]unction displayPayments(payments) {
-    console.log('Displaying payments:', payments);
-    
-    const tbody = document.getElementById('paymentsBody');
-    if (!tbody) {
-        console.error('Payments table body not found!');
-        return;
-    }
-    
-    if (!payments || payments.length === 0) {
-        console.log('No payments data found');
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: #666;">No payments recorded yet</td></tr>';
-    } else {
-        console.log(`Rendering ${payments.length} payments`);
-        tbody.innerHTML = payments.map(payment => `
-            <tr>
-                <td>${payment.invoice_number || 'N/A'}</td>
-                <td>${payment.provider_company || 'N/A'}</td>
-                <td>${new Date(payment.payment_date).toLocaleDateString()}</td>
-                <td>${formatCurrency(payment.amount)}</td>
-                <td>${payment.payment_method || 'Bank Transfer'}</td>
-            </tr>
-        `).join('');
-    }
-}*/
-
 // Display payments in payments section - AGGRESSIVE VERSION
 function displayPayments(payments) {
     console.log('🔄 Displaying payments:', payments);
@@ -1621,35 +946,6 @@ function displayPayments(payments) {
         console.log('📊 Table rows after update:', tbody.querySelectorAll('tr').length);
     }
 }
-
-
-
-
-
-
-// Load purchaser data
-/*async function loadPurchaserData() {
-    try {
-        const [statsResponse, invoicesResponse] = await Promise.all([
-            fetch('/api/dashboard/stats', {
-                headers: { 'Authorization': `Bearer ${token}` }
-            }),
-            fetch('/api/invoices', {
-                headers: { 'Authorization': `Bearer ${token}` }
-            })
-        ]);
-
-        if (statsResponse.ok && invoicesResponse.ok) {
-            const stats = await statsResponse.json();
-            const invoices = await invoicesResponse.json();
-            
-            updatePurchaserStats(stats);
-            displayPurchaserInvoices(invoices);
-        }
-    } catch (error) {
-        console.error('Failed to load purchaser data:', error);
-    }
-}*/
 
 // Update provider statistics
 function updateProviderStats(stats) {
@@ -1771,44 +1067,6 @@ async function showCreateInvoiceModal() {
     document.getElementById('createInvoiceModal').style.display = 'block';
 }
 
-// Show create invoice modal
-/*async function showCreateInvoiceModal() {
-    // Load purchasers for dropdown
-    try {
-        const response = await fetch('/api/users/purchasers', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        
-        if (!response.ok) {
-            throw new Error('Failed to load purchasers');
-        }
-        
-        const purchasers = await response.json();
-        
-        const select = document.getElementById('invoicePurchaser');
-        select.innerHTML = '<option value="">Select a purchaser...</option>' + 
-            purchasers.map(p => `<option value="${p.id}">${p.company_name}</option>`).join('');
-        
-        // Set default due date to 30 days from now
-        const dueDate = new Date();
-        dueDate.setDate(dueDate.getDate() + 30);
-        document.getElementById('invoiceDueDate').value = dueDate.toISOString().split('T')[0];
-        
-    } catch (error) {
-        console.error('Failed to load purchasers:', error);
-        alert('Failed to load purchaser list. Please try again.');
-        return;
-    }
-    
-    document.getElementById('createInvoiceModal').style.display = 'block';
-}*/
-
-
-
-
-
-
-
 // Add invoice item
 function addInvoiceItem() {
     const itemsContainer = document.getElementById('invoiceItems');
@@ -1881,39 +1139,6 @@ document.getElementById('createInvoiceForm').addEventListener('submit', async (e
 });
 
 
-
-
-// Record payment
-/*async function recordPayment(invoiceId) {
-    const amount = prompt('Enter payment amount:');
-    if (!amount) return;
-    
-    try {
-        const response = await fetch(`/api/invoices/${invoiceId}/payments`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                amount: parseFloat(amount),
-                payment_date: new Date().toISOString().split('T')[0],
-                payment_method: 'Bank Transfer'
-            })
-        });
-
-        if (response.ok) {
-            alert('Payment recorded successfully!');
-            loadPurchaserData();
-        } else {
-            const data = await response.json();
-            alert('Failed to record payment: ' + data.error);
-        }
-    } catch (error) {
-        alert('Failed to record payment: ' + error.message);
-    }
-}*/
-
 // Debug function to check payments
 async function debugPayments() {
     try {
@@ -1961,99 +1186,6 @@ async function recordPayment(invoiceId) {
 }
 
 
-
-
-
-
-
-
-// Handle payment form submission
-/*document.getElementById('paymentForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const invoiceId = document.getElementById('paymentInvoiceId').value;
-    const amount = parseFloat(document.getElementById('paymentAmount').value);
-    const paymentDate = document.getElementById('paymentDate').value;
-    const paymentMethod = document.getElementById('paymentMethod').value;
-    const referenceNumber = document.getElementById('paymentReference').value;
-    
-    try {
-        const response = await fetch(`/api/invoices/${invoiceId}/payments`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                amount: amount,
-                payment_date: paymentDate,
-                payment_method: paymentMethod,
-                reference_number: referenceNumber
-            })
-        });
-
-        if (response.ok) {
-            alert('Payment recorded successfully!');
-            document.getElementById('paymentModal').style.display = 'none';
-            document.getElementById('paymentForm').reset();
-            loadPurchaserData(); // Refresh the data
-        } else {
-            const data = await response.json();
-            alert('Failed to record payment: ' + data.error);
-        }
-    } catch (error) {
-        alert('Failed to record payment: ' + error.message);
-    }
-});
-*/
-
-
-// Handle payment form submission
-/*document.getElementById('paymentForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const invoiceId = document.getElementById('paymentInvoiceId').value;
-    const amount = parseFloat(document.getElementById('paymentAmount').value);
-    const paymentDate = document.getElementById('paymentDate').value;
-    const paymentMethod = document.getElementById('paymentMethod').value;
-    const referenceNumber = document.getElementById('paymentReference').value;
-    
-    try {
-        const response = await fetch(`/api/invoices/${invoiceId}/payments`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                amount: amount,
-                payment_date: paymentDate,
-                payment_method: paymentMethod,
-                reference_number: referenceNumber
-            })
-        });
-
-        if (response.ok) {
-            alert('Payment recorded successfully!');
-            document.getElementById('paymentModal').style.display = 'none';
-            document.getElementById('paymentForm').reset();
-            
-            // Force refresh all data
-            if (currentUser.role === 'purchaser') {
-                await loadPurchaserData();
-                
-                // Switch to payments tab to see the new payment
-                showTab('payments');
-            }
-        } else {
-            const data = await response.json();
-            alert('Failed to record payment: ' + data.error);
-        }
-    } catch (error) {
-        alert('Failed to record payment: ' + error.message);
-    }
-});*/
-
 // Handle payment form submission
 document.getElementById('paymentForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -2100,10 +1232,6 @@ document.getElementById('paymentForm').addEventListener('submit', async (e) => {
     }
 });
 
-
-
-
-
 // Mark invoice as defaulted
 async function markDefaulted(invoiceId) {
     if (!confirm('Are you sure you want to mark this invoice as defaulted?')) return;
@@ -2127,31 +1255,6 @@ async function markDefaulted(invoiceId) {
         alert('Failed to mark as defaulted: ' + error.message);
     }
 }
-
-// View invoice details
-//function viewInvoice(invoiceId) {
-    //alert(`Viewing invoice ${invoiceId} - Details would show here in a real implementation`);
-//}
-
-
-// View invoice details
-/*async function viewInvoice(invoiceId) {
-    try {
-        const response = await fetch(`/api/invoices/${invoiceId}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (response.ok) {
-            const invoice = await response.json();
-            showInvoiceDetails(invoice);
-        } else {
-            alert('Failed to load invoice details');
-        }
-    } catch (error) {
-        alert('Failed to load invoice details: ' + error.message);
-    }
-}*/
-
 
 
 // View invoice details
@@ -2244,28 +1347,6 @@ function showInvoiceDetails(invoice) {
 }
 
 
-
-
-
-
-
-// Tab navigation
-/*function showTab(tabName) {
-    // Hide all tabs
-    document.querySelectorAll('[id$="Tab"]').forEach(tab => {
-        tab.style.display = 'none';
-    });
-    
-    // Show selected tab
-    document.getElementById(tabName + 'Tab').style.display = 'block';
-    
-    // Update active nav
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('active');
-    });
-    event.target.classList.add('active');
-}*/
-
 // Tab navigation
 function showTab(tabName) {
     // Hide all tabs
@@ -2294,99 +1375,6 @@ function showTab(tabName) {
     }
 }
 
-// Load analytics data
-/*async function loadAnalytics() {
-    try {
-        const response = await fetch('/api/analytics', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (response.ok) {
-            const analytics = await response.json();
-            renderAnalyticsCharts(analytics);
-        } else {
-            console.error('Failed to load analytics');
-        }
-    } catch (error) {
-        console.error('Error loading analytics:', error);
-    }
-}*/
-
-
-// Load analytics data
-/*async function loadAnalytics() {
-    try {
-        // Show loading
-        document.getElementById('analyticsLoading').style.display = 'block';
-        
-        const response = await fetch('/api/analytics', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (response.ok) {
-            const analytics = await response.json();
-            renderAnalyticsCharts(analytics);
-        } else {
-            document.getElementById('analyticsLoading').innerHTML = '<p>Failed to load analytics data.</p>';
-        }
-    } catch (error) {
-        console.error('Error loading analytics:', error);
-        document.getElementById('analyticsLoading').innerHTML = '<p>Error loading analytics data.</p>';
-    }
-}*/
-
-// Load analytics data
-/*async function loadAnalytics() {
-    try {
-        // Show loading
-        document.getElementById('analyticsLoading').style.display = 'block';
-        document.getElementById('analyticsLoading').innerHTML = '<p>Loading analytics data...</p>';
-        
-        const response = await fetch('/api/analytics', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (response.ok) {
-            const analytics = await response.json();
-            renderAnalyticsCharts(analytics);
-        } else {
-            const errorData = await response.json();
-            document.getElementById('analyticsLoading').innerHTML = 
-                `<p>Failed to load analytics: ${errorData.error || 'Unknown error'}</p>`;
-        }
-    } catch (error) {
-        console.error('Error loading analytics:', error);
-        document.getElementById('analyticsLoading').innerHTML = 
-            `<p>Network error: ${error.message}</p>`;
-    }
-}*/
-// Load analytics data
-/*async function loadAnalytics() {
-    try {
-        // Show loading
-        const analyticsContent = document.getElementById('analyticsContent');
-        if (analyticsContent) {
-            analyticsContent.innerHTML = '<div style="text-align: center; padding: 40px;">Loading analytics data...</div>';
-        }
-        
-        const response = await fetch('/api/analytics', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (response.ok) {
-            const analytics = await response.json();
-            renderAnalyticsCharts(analytics);
-        } else {
-            const errorData = await response.json();
-            document.getElementById('analyticsContent').innerHTML = 
-                `<div style="text-align: center; padding: 40px; color: #dc3545;">Failed to load analytics: ${errorData.error || 'Unknown error'}</div>`;
-        }
-    } catch (error) {
-        console.error('Error loading analytics:', error);
-        document.getElementById('analyticsContent').innerHTML = 
-            `<div style="text-align: center; padding: 40px; color: #dc3545;">Network error: ${error.message}</div>`;
-    }
-}*/
 
 // Load analytics data
 async function loadAnalytics() {
@@ -2418,297 +1406,7 @@ async function loadAnalytics() {
     }
 }
 
-// Render analytics charts
-/*function renderAnalyticsCharts(analytics) {
-    const ctx = document.getElementById('providerChart').getContext('2d');
-    
-    // Clear previous charts
-    if (window.analyticsCharts) {
-        Object.values(window.analyticsCharts).forEach(chart => chart.destroy());
-    }
-    window.analyticsCharts = {};
-    
-    // Chart 1: Invoice Status Distribution (Pie Chart)
-    const statusCtx = document.createElement('canvas');
-    statusCtx.width = 400;
-    statusCtx.height = 300;
-    document.getElementById('analyticsTab').appendChild(statusCtx);
-    
-    const statusLabels = analytics.statusDistribution.map(item => 
-        item.status.charAt(0).toUpperCase() + item.status.slice(1)
-    );
-    const statusData = analytics.statusDistribution.map(item => item.count);
-    const statusColors = ['#28a745', '#ffc107', '#dc3545']; // Green, Yellow, Red
-    
-    window.analyticsCharts.statusChart = new Chart(statusCtx, {
-        type: 'pie',
-        data: {
-            labels: statusLabels,
-            datasets: [{
-                data: statusData,
-                backgroundColor: statusColors,
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: false,
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Invoice Status Distribution'
-                },
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        }
-    });
-    
-    // Chart 2: Monthly Revenue (Line Chart)
-    const revenueCtx = document.createElement('canvas');
-    revenueCtx.width = 600;
-    revenueCtx.height = 300;
-    document.getElementById('analyticsTab').appendChild(revenueCtx);
-    
-    const months = analytics.monthlyRevenue.map(item => {
-        const [year, month] = item.month.split('-');
-        return new Date(year, month - 1).toLocaleDateString('en', { month: 'short', year: 'numeric' });
-    });
-    const revenue = analytics.monthlyRevenue.map(item => item.revenue);
-    
-    window.analyticsCharts.revenueChart = new Chart(revenueCtx, {
-        type: 'line',
-        data: {
-            labels: months,
-            datasets: [{
-                label: 'Monthly Revenue',
-                data: revenue,
-                borderColor: '#007bff',
-                backgroundColor: 'rgba(0, 123, 255, 0.1)',
-                borderWidth: 2,
-                fill: true
-            }]
-        },
-        options: {
-            responsive: false,
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Monthly Revenue (Last 12 Months)'
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-    
-    // Chart 3: Top Purchasers (Bar Chart)
-    const purchasersCtx = document.createElement('canvas');
-    purchasersCtx.width = 600;
-    purchasersCtx.height = 300;
-    document.getElementById('analyticsTab').appendChild(purchasersCtx);
-    
-    const purchaserNames = analytics.topPurchasers.map(item => item.company_name);
-    const purchaserAmounts = analytics.topPurchasers.map(item => item.total_amount);
-    
-    window.analyticsCharts.purchasersChart = new Chart(purchasersCtx, {
-        type: 'bar',
-        data: {
-            labels: purchaserNames,
-            datasets: [{
-                label: 'Total Invoice Amount',
-                data: purchaserAmounts,
-                backgroundColor: '#17a2b8',
-                borderColor: '#138496',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: false,
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Top 5 Purchasers by Revenue'
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-}*/
 
-// Render analytics charts
-/*function renderAnalyticsCharts(analytics) {
-    const analyticsTab = document.getElementById('analyticsTab');
-    
-    // Clear previous charts and hide loading
-    document.getElementById('analyticsLoading').style.display = 'none';
-    
-    // Clear previous charts
-    if (window.analyticsCharts) {
-        Object.values(window.analyticsCharts).forEach(chart => chart.destroy());
-    }
-    
-    // Remove existing chart containers
-    const existingCharts = analyticsTab.querySelectorAll('.chart-container');
-    existingCharts.forEach(chart => chart.remove());
-    
-    window.analyticsCharts = {};
-    
-    // Create container for charts
-    const chartsContainer = analyticsTab.querySelector('div[style*="display: flex"]');
-    
-    if (analytics.statusDistribution && analytics.statusDistribution.length > 0) {
-        // Chart 1: Invoice Status Distribution (Pie Chart)
-        const statusContainer = document.createElement('div');
-        statusContainer.className = 'chart-container';
-        statusContainer.style.cssText = 'background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
-        
-        const statusTitle = document.createElement('h4');
-        statusTitle.textContent = 'Invoice Status Distribution';
-        statusTitle.style.textAlign = 'center';
-        statusTitle.style.marginBottom = '20px';
-        statusContainer.appendChild(statusTitle);
-        
-        const statusCanvas = document.createElement('canvas');
-        statusCanvas.width = 300;
-        statusCanvas.height = 300;
-        statusContainer.appendChild(statusCanvas);
-        chartsContainer.appendChild(statusContainer);
-        
-        const statusLabels = analytics.statusDistribution.map(item => 
-            item.status.charAt(0).toUpperCase() + item.status.slice(1)
-        );
-        const statusData = analytics.statusDistribution.map(item => item.count);
-        const statusColors = ['#28a745', '#ffc107', '#dc3545'];
-        
-        window.analyticsCharts.statusChart = new Chart(statusCanvas, {
-            type: 'pie',
-            data: {
-                labels: statusLabels,
-                datasets: [{
-                    data: statusData,
-                    backgroundColor: statusColors,
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
-            }
-        });
-    }
-    
-    if (analytics.monthlyRevenue && analytics.monthlyRevenue.length > 0) {
-        // Chart 2: Monthly Revenue (Line Chart)
-        const revenueContainer = document.createElement('div');
-        revenueContainer.className = 'chart-container';
-        revenueContainer.style.cssText = 'background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 100%; max-width: 800px;';
-        
-        const revenueTitle = document.createElement('h4');
-        revenueTitle.textContent = 'Monthly Revenue (Last 12 Months)';
-        revenueTitle.style.textAlign = 'center';
-        revenueTitle.style.marginBottom = '20px';
-        revenueContainer.appendChild(revenueTitle);
-        
-        const revenueCanvas = document.createElement('canvas');
-        revenueCanvas.width = 700;
-        revenueCanvas.height = 300;
-        revenueContainer.appendChild(revenueCanvas);
-        chartsContainer.appendChild(revenueContainer);
-        
-        const months = analytics.monthlyRevenue.map(item => {
-            const [year, month] = item.month.split('-');
-            return new Date(year, month - 1).toLocaleDateString('en', { month: 'short', year: 'numeric' });
-        });
-        const revenue = analytics.monthlyRevenue.map(item => item.revenue);
-        
-        window.analyticsCharts.revenueChart = new Chart(revenueCanvas, {
-            type: 'line',
-            data: {
-                labels: months,
-                datasets: [{
-                    label: 'Monthly Revenue',
-                    data: revenue,
-                    borderColor: '#007bff',
-                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
-                    borderWidth: 2,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: false,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    }
-    
-    if (analytics.topPurchasers && analytics.topPurchasers.length > 0) {
-        // Chart 3: Top Purchasers (Bar Chart)
-        const purchasersContainer = document.createElement('div');
-        purchasersContainer.className = 'chart-container';
-        purchasersContainer.style.cssText = 'background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 100%; max-width: 800px;';
-        
-        const purchasersTitle = document.createElement('h4');
-        purchasersTitle.textContent = 'Top 5 Purchasers by Revenue';
-        purchasersTitle.style.textAlign = 'center';
-        purchasersTitle.style.marginBottom = '20px';
-        purchasersContainer.appendChild(purchasersTitle);
-        
-        const purchasersCanvas = document.createElement('canvas');
-        purchasersCanvas.width = 700;
-        purchasersCanvas.height = 300;
-        purchasersContainer.appendChild(purchasersCanvas);
-        chartsContainer.appendChild(purchasersContainer);
-        
-        const purchaserNames = analytics.topPurchasers.map(item => item.company_name);
-        const purchaserAmounts = analytics.topPurchasers.map(item => item.total_amount);
-        
-        window.analyticsCharts.purchasersChart = new Chart(purchasersCanvas, {
-            type: 'bar',
-            data: {
-                labels: purchaserNames,
-                datasets: [{
-                    label: 'Total Invoice Amount',
-                    data: purchaserAmounts,
-                    backgroundColor: '#17a2b8',
-                    borderColor: '#138496',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: false,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    }
-    
-    // Show message if no data
-    if ((!analytics.statusDistribution || analytics.statusDistribution.length === 0) &&
-        (!analytics.monthlyRevenue || analytics.monthlyRevenue.length === 0) &&
-        (!analytics.topPurchasers || analytics.topPurchasers.length === 0)) {
-        document.getElementById('analyticsLoading').innerHTML = '<p>No analytics data available yet. Create some invoices to see analytics.</p>';
-        document.getElementById('analyticsLoading').style.display = 'block';
-    }
-}*/
 // Render analytics charts
 function renderAnalyticsCharts(analytics) {
     const analyticsContent = document.getElementById('analyticsContent');
@@ -2869,37 +1567,7 @@ function renderAnalyticsCharts(analytics) {
         analyticsContent.innerHTML = '<div style="text-align: center; padding: 40px;"><p>No analytics data available yet. Create some invoices to see analytics.</p></div>';
     }
 }
-//TEMPORARYYYYYYY
-// Test payments function - add this temporarily
-/*async function testPayments() {
-    try {
-        console.log('Testing payments...');
-        
-        // Test 1: Check if API endpoint works
-        const response = await fetch('/api/payments', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        console.log('Payments API status:', response.status);
-        
-        if (response.ok) {
-            const payments = await response.json();
-            console.log('Payments data:', payments);
-            console.log('Number of payments:', payments.length);
-            
-            // Test 2: Check if table body exists
-            const tbody = document.getElementById('paymentsBody');
-            console.log('Payments table body found:', !!tbody);
-            
-            if (tbody) {
-                console.log('Table body innerHTML before:', tbody.innerHTML);
-            }
-        } else {
-            console.log('Payments API error:', await response.json());
-        }
-    } catch (error) {
-        console.error('Payments test error:', error);
-    }
-}*/
+
 // Enhanced test payments function
 async function testPayments() {
     try {
@@ -2939,11 +1607,6 @@ async function testPayments() {
         console.error('Payments test error:', error);
     }
 }
-
-
-
-
-
 
 // Logout
 function logout() {
